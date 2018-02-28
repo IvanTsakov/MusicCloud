@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title %}fLor1na{% endblock %}</title>
+		{% load staticfiles %}
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> 
+		<link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'> 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script> 
+		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+		<link rel="stylesheet" type="text/css" href="{% static 'music/style.css' %}"/>﻿
+	</head>
+	<body>
+		{% if messages %}
+		<ul class="messages">
+		    {% for message in messages %}
+		    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		    {% endfor %}
+		</ul>
+		{% endif %}
+
+		
+		{%if user.is_authenticated%}
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+		
+				<!-- Header -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>	
+					</button>
+					<a class="navbar-brand" href="{% url 'music:index' %}"> {{user.username}} </a>
+				</div>
+
+
+				<!-- Items -->
+				<div class="collapse navbar-collapse" id="#topNavBar">
+					<ul class="nav navbar-nav">
+						{% if request.get_full_path == "/music/" %}
+							<li class=" active ">
+						{%else%}
+							<li class ="#">
+						{%endif%}
+							<a href="{% url 'music:index' %}">
+								<span class="glyphicon glyphicon-cd" aria-hidden="true"></span>&nbsp; Albums
+							</a>
+						</li>
+						{% if request.get_full_path == "/music/songs/" %}
+							<li class="active">
+						{%else%}
+							<li class="#">
+						{%endif%}
+							<a href="{% url 'music:songs' %}">
+								<span class="glyphicon glyphicon-music" aria-hidden="true"></span>&nbsp; Songs
+							</a>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search" method="get" action="#">
+						<div class="form-group">
+							<input type="text" class="form-control" name="q" value="">
+						</div>
+						<button type="submit" class="btn btn-default">Search</button>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						{%if request.get_full_path == "/music/favorited-albums/"%}
+						<li class="active">
+						{%else%}
+						<li class="#">
+						{%endif%}
+							<a href="{% url 'music:favorite_albums' %}">
+								<span class="glyphicon glyphicon-music" aria-hidden="true"></span>&nbsp; Favorite Albums
+							</a>
+
+						</li>
+						{%if request.get_full_path == "/music/album/add/"%}
+						<li class="active">
+						{%else%}
+						<li class="#">
+						{%endif%}
+							<a href="{% url 'music:album-add' %}">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp; Add Album
+							</a>
+						</li>
+						<li class="#">
+							<a href="{% url 'music:logout' %}">
+								<span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp; Logout
+							</a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</nav>
+		{%else%}
+			<nav class="navbar navbar-inverse">
+				<div class="container-fluid">
+			
+					<!-- Header -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>	
+						</button>
+					</div>
+
+
+					<!-- Items -->
+					<div class="collapse navbar-collapse" id="#topNavBar">
+						<ul class="nav navbar-nav">
+							<li>
+								<a href="{% url 'music:register' %}">
+								<span class="glyphicon glyphicon-cd" aria-hidden="true"></span>&nbsp; Register
+								</a>
+							</li>
+							<li>
+								<a href="{% url 'music:authenticate' %}">
+								<span aria-hidden="true"></span>&nbsp; Log In
+								</a>
+							</li>
+						</ul>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			{%endif%}
+		{% block body %}
+
+		{% endblock %}
+	</body>
+</html>

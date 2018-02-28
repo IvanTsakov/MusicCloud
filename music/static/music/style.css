@@ -1,0 +1,16 @@
+body{
+	background: white url("images/2.jpg")
+}
+
+.navbar{
+	border-radius: 0;
+}
+
+.navbar-brand{
+	font-family: 'Satisfy', cursive;
+}
+
+
+.favorite{
+	color:orange;
+}
