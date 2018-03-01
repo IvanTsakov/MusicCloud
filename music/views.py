@@ -171,12 +171,8 @@ def favorite_song_in_songs(request, pk):
 def favorited_songs(request):
     user = request.user
     songs = user.song_set.all()
-
-    # if len(songs) > 0:
     return render(request,'music/favorite-songs.html', {'songs':songs})
-    # else:
-    #     messages.add_message(request, messages.INFO, 'You do not have favorite songs.')
-    #     return redirect('music:songs')
+
 
 def favorited_albums(request):
     user = request.user
