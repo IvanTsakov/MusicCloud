@@ -2,7 +2,7 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login
+from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login, get_user_model
 from django.views.generic import View
 from music.models import Album, Song
 from music.forms import UserForm, AlbumSongForm, AlbumForm, SongForm
@@ -11,6 +11,9 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages, auth
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+import operator
+from django.contrib.auth.models import User
 
 @login_required
 def index_view(request):
@@ -58,7 +61,7 @@ def album_create(request):
 def album_update(request, pk):
     user = request.user
     album =get_object_or_404(Album, pk=pk)
-    if user.username!=album.creator:
+    if user!=album.creator:
         messages.add_message(request, messages.INFO, 'You cannot update this album, because you are not the creator.')
         return redirect('music:index')
     else:
@@ -111,8 +114,6 @@ def album_song_create(request, pk):
 def song_update(request, pk):
     user = request.user
     song = get_object_or_404(Song, pk=pk)
-
-    # assert False, song.album
     if user.username!=song.creator:
         messages.add_message(request, messages.INFO, 'You cannot update this song, because you are not the creator.')
         return redirect('music:songs')
@@ -178,11 +179,7 @@ def favorited_albums(request):
     user = request.user
     albums = user.album_set.all()
 
-    # if len(albums) > 0:
     return render(request,'music/favorite-albums.html', {'albums':albums})
-    # else:
-    #     messages.add_message(request, messages.INFO, 'You do not have favorite albums.')
-    #     return redirect('music:index')
 
 class UserFormView(View):
     form_class = UserForm
@@ -221,7 +218,7 @@ def auth(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
     user = authenticate(request, username=username, password=password)
-    # assert False, (password, user.password)
+
     if user is not None:
         auth_login(request,user)
         return redirect('music:index')
@@ -231,3 +228,9 @@ def auth(request):
 def logout(request):
     auth_logout(request)
     return render(request,'music/login.html')
+
+
+def all_users(request):
+    users = User.objects.annotate(num_albums = Count('album')).order_by('-num_albums')
+    return render(request, 'music/users.html', {'users' : users})
+

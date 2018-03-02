@@ -65,8 +65,8 @@
                                 </td>
                                 <td>
                                     {%if song.is_favorite %}
-                                        <a href="{% url 'music:favorite_song' song.id %}"  class="btn btn-warning btn-sm btn-favorite" role="button">
-                                        <span class="glyphicon glyphicon-star" action=""></span></a>
+                                        <a href="{% url 'music:favorite_song' song.id %}"  class="btn btn-default btn-sm btn-favorite" role="button">
+                                        <span class="glyphicon glyphicon-star favorite" action=""></span></a>
                                     {%else%}
                                          <a href="{% url 'music:favorite_song' song.id %}"  class="btn btn-default btn-sm btn-favorite" role="button">
                                         <span class="glyphicon glyphicon-star" action=""></span></a>

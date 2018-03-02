@@ -17,6 +17,8 @@ urlpatterns = [
 	#/music/<album_id>/
 	url(r'^album/(?P<pk>[0-9]+)/$', views.detail_view, name = 'detail'),
 
+	url(r'^users/$', views.all_users, name = 'all_users'),
+
 	url(r'^album/(?P<pk>[0-9]+)/favorite/$', views.favorite_album, name = 'favorite_album'),
 
 	url(r'^favorited-albums/$', views.favorited_albums, name = 'favorite_albums'),

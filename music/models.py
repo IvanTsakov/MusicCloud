@@ -11,7 +11,7 @@ class Album(models.Model):
 	album_title = models.CharField(max_length=250)
 	genre = models.CharField(max_length=100)
 	album_logo = models.FileField() 
-	creator = models.CharField(max_length=200)
+	creator = models.ForeignKey(User, null = True, related_name = "album_creator")
 	users = models.ManyToManyField(User)
 
 	def get_absolute_url(self):

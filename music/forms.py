@@ -24,9 +24,9 @@ class SongForm(forms.ModelForm):
 		fields = ['album', 'song_title']
 
 	def __init__(self, *args, **kwargs):
-		creator=kwargs.pop('creator')
+		album_creator=kwargs.pop('album_creator')
 		super(SongForm, self).__init__(*args, **kwargs)
-		self.instance.creator = creator
+		self.instance.album_creator = album_creator
 		self.instance.file_type = 'mp3'
 
 class AlbumSongForm(forms.ModelForm):
