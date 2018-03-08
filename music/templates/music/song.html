@@ -1,42 +1,31 @@
 
 {% extends 'music/base.html' %}
-{% block title %}{{ album }}{% endblock %}
-<!-- {% block albums_active %}active{% endblock %} -->
+{% block title %}{{ song }}{% endblock %}
+{% load humanize %}
 
 {% block body %}
-
 <div class="container-fluid songs-container">
 
     <div class="row">
-        <!-- Left Album Info -->
         <div class="col-sm-4 col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a href="{% url 'music:detail' album.id %}">
-                        {% if album.album_logo %}
-                            <img src="{{ album.album_logo.url }}" class="img-responsive">
+                        {% if song.album.album_logo %}
+                            <img src="{{ song.album.album_logo.url }}" class="img-responsive">
                         {% else %}
                             <h3>No image to display</h3>
                         {% endif %}
-                    </a>
-                    <h1>{{ album.album_title }} <small>{{ album.genre }}</small></h1>
-                    <h2>{{ album.artist }}</h2>
+                    <h1>Song:{{ song.song_title }} </h1>
+                    <h2>Album:{{ song.album}}</h2>
                 </div>
             </div>
         </div>
         <!-- Right Song Info -->
         <div class="col-sm-8 col-md-9">
-
-            <ul class="nav nav-pills" style="margin-bottom: 10px;">
-                <li role="presentation" class="active"><a href="{% url 'music:detail' album.id %}">View All</a></li>
-                <li role="presentation" class="active"><a href="{% url 'music:album-update' album.id %}">Edit Album</a></li>
-                <li role="presentation" class="active"><a href="{% url 'music:album-add-song' album.id %}">Add New Song</a></li>
-            </ul>
-
             <div class="panel panel-default">
                 <div class="panel-body">
-
-                    <h3>All Songs</h3>
+<!-- 
+                    <h3>All Songs</h3> -->
 
                     {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
@@ -45,20 +34,13 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Title</th>
                             <th>Audio File</th>
-                            <th>Favorite</th>
+<!--                             <th>Favorite</th> -->
                             <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for song in songs %}
                             <tr>
-                                <td>
-                                    <a target="_blank" href="{% url 'music:song_view' song.id %}">
-                                    {{ song.song_title }}
-                                    </a>
-                                </td>
                                 <td>
                                     <a target="_blank" href="{{ song.audio_file.url }}">
                                         <button type="button" class="btn btn-success btn-xs">
@@ -67,16 +49,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    {%if song.is_favorite %}
-                                        <a href="{% url 'music:favorite_song' song.id %}"  class="btn btn-default btn-sm btn-favorite" role="button">
-                                        <span class="glyphicon glyphicon-star favorite" action=""></span></a>
-                                    {%else%}
-                                         <a href="{% url 'music:favorite_song' song.id %}"  class="btn btn-default btn-sm btn-favorite" role="button">
-                                        <span class="glyphicon glyphicon-star" action=""></span></a>
-                                    {%endif%}
-                                </td>
-                                <td>
-                                    <form action="{% url 'music:song-delete' song.id%}" method="post" 
+                                    <form action="{% url 'music:song-delete' song.pk%}" method="post" 
                                                                                         style="display: inline;">
                                         {% csrf_token %}
                                         <input type="hidden" name="song_id" value="{{ song.id }}" />
@@ -86,7 +59,32 @@
                                     </form>
                                 </td>
                             </tr>
-                        {% endfor %}
+                            <tr>
+                                <td>
+                                    <div class = "avatar" id="avatar_div">{{ initials }}</div>
+                                </td>
+                                <td>
+                                    <h1>New comment</h1>
+                                    <form method="POST" class="post-form">
+                                        {% csrf_token %}
+                                        {% include 'music/form-template.html' %}
+                                        <button type="submit" class="save btn btn-default">Add Comment</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {% for comment in song.comment_set.all %}
+                                        <div class="comment">
+                                            <div class="date">{{ comment.created_date|naturaltime }}</div>
+                                            <strong>{{ comment.author }}</strong>
+                                            <p>{{ comment.text|linebreaks }}</p>
+                                        </div>
+                                    {%empty%}
+                                        <p>No comments here yet :(</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
 

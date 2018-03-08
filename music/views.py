@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404, render_to_resp
 from django.contrib.auth import authenticate, logout as auth_logout, login as auth_login, get_user_model
 from django.views.generic import View
 from music.models import Album, Song
-from music.forms import UserForm, AlbumSongForm, AlbumForm, SongForm
+from music.forms import Registration_UserForm, AlbumSongForm, AlbumForm, SongForm,SignUp_UserForm, CommentForm
 from django import forms
 from django.http import HttpResponseRedirect
 from django.contrib import messages, auth
@@ -20,7 +20,6 @@ def index_view(request):
     albums = Album.objects.all()
     context_object_name = 'all_albums'
     user_favorite_albums = request.user.album_set.all()
-    # assert False, request.session.items()
     for album in albums:
          album.is_favorite = album in user_favorite_albums
     return render(request,'music/index.html', {'albums':albums})
@@ -32,6 +31,26 @@ def detail_view(request, pk):
     for song in songs:
         song.is_favorite = song in user_favorite_songs
     return render(request,'music/detail.html', {'album':album, 'songs':songs})   
+
+def song_view(request, pk):
+    song = get_object_or_404(Song, pk=pk)
+    user = request.user
+    # if user.first_name and user.last_name:
+    #     initials = user.first_name[0] + user.last_name[0]
+    # else:
+    #     initials = user.username[0] + user.username[1]
+        
+    initials = user.profile.get_initials()
+    if request.method == "POST":
+        form = CommentForm(request.POST, author = user)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.song = song
+            comment.save()
+            return redirect('music:song_view', pk=pk)
+    else:
+        form = CommentForm(author = user)
+    return render(request,'music/song.html', {'song':song, 'initials': initials, 'form':form}) 
 
 @login_required
 def songs_view(request):
@@ -114,7 +133,7 @@ def album_song_create(request, pk):
 def song_update(request, pk):
     user = request.user
     song = get_object_or_404(Song, pk=pk)
-    if user.username!=song.creator:
+    if user!=song.creator:
         messages.add_message(request, messages.INFO, 'You cannot update this song, because you are not the creator.')
         return redirect('music:songs')
     else:
@@ -123,7 +142,7 @@ def song_update(request, pk):
             if form.is_valid():
                 form.save()
                 return redirect('music:songs')
-        form = SongForm(instance = song,creator=song.creator)
+        form = SongForm(instance = song, creator=song.creator)
         return render(request, 'music/song_form.html', {
         'creator':user,
         'form':form
@@ -181,8 +200,9 @@ def favorited_albums(request):
 
     return render(request,'music/favorite-albums.html', {'albums':albums})
 
+
 class UserFormView(View):
-    form_class = UserForm
+    form_class = Registration_UserForm
     template_name = 'music/registration_form.html'
 
     def get(self, request):
@@ -209,6 +229,7 @@ class UserFormView(View):
         return render(request, self.template_name, {'form':form})
 
 
+
 def login(request):
     c={}
     return render(request,'login.html',{'c':c})
@@ -233,4 +254,3 @@ def logout(request):
 def all_users(request):
     users = User.objects.annotate(num_albums = Count('album')).order_by('-num_albums')
     return render(request, 'music/users.html', {'users' : users})
-

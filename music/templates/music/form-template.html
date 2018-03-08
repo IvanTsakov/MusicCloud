@@ -1,3 +1,4 @@
+  {% csrf_token %}
 
   {{ form.non_field_errors }}
 
@@ -6,7 +7,7 @@
     {{ hidden_field }}
   {% endfor %}
 
-  <table border="2">
+  <table border="1">
     {% for field in form.visible_fields %}
       <tr>
         <th>{{ field.label_tag }}</th>
@@ -18,3 +19,4 @@
       </tr>
     {% endfor %}
   </table>
+

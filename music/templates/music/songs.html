@@ -30,9 +30,13 @@
                     <tbody>
 	                    {% for song in songs %}
 	                        <tr>
-	                            <td>{{ song.song_title }}</td>
 	                            <td>
-	                                <a target="_blank" href="{{ song.audio_file.url }}">
+                                    <a target="_blank" href="{% url 'music:song_view' song.id %}">
+                                        {{ song.song_title }}
+                                    </a>
+                                </td>
+	                            <td>
+	                                <a target="_blank" href="#">
 	                                    <button type="button" class="btn btn-success btn-xs">
 	                                        <span class="glyphicon glyphicon-play"></span>&nbsp; Play
 	                                    </button>

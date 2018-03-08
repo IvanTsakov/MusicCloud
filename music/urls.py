@@ -12,7 +12,7 @@ urlpatterns = [
 
 	url(r'^login/$', views.auth, name='authenticate'),
 
-	url(r'^register/$', views.UserFormView.as_view(), name = 'register'),
+	url(r'^signup/$', views.UserFormView.as_view(), name='signup'),
 
 	#/music/<album_id>/
 	url(r'^album/(?P<pk>[0-9]+)/$', views.detail_view, name = 'detail'),
@@ -40,13 +40,17 @@ urlpatterns = [
 	#music/songs
 	url(r'^songs/$', views.songs_view, name='songs'),
 
+	url(r'^song/(?P<pk>[0-9]+)/$', views.song_view, name ='song_view'),
+
 	url(r'songs/favorite-songs/$', views.favorited_songs, name='favorite_songs'),
+
 	#music/album/2/song/delete_song/2/
 	url(r'^song/add/$', views.song_create, name='song-add'),
 
-	url(r'^song/(?P<pk>[0-9]+)/$', views.song_update, name='song-update'),
+	url(r'^song/(?P<pk>[0-9]+)/update/$', views.song_update, name='song-update'),
 
 	url(r'^song/(?P<pk>[0-9]+)/delete/$', views.delete_song, name='song-delete'),
 
-	url(r'^song/(?P<pk>[0-9]+)/delete/$', views.delete_song_in_songs, name='song-delete-in-songs'),
+	url(r'^songs/song/(?P<pk>[0-9]+)/delete-song/$', views.delete_song_in_songs, name='song-delete-in-songs'),
+	
 ]

@@ -9,7 +9,6 @@ def change_creator(apps, schema_editor):
     Album = apps.get_model('music', 'Album')
     for album in Album.objects.all():
         creator, created = User.objects.get_or_create(username = album.creator)
-        # album.album_creator = creator
         album.save()
 
 class Migration(migrations.Migration):

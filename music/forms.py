@@ -1,13 +1,23 @@
 from django.contrib.auth.models import User
 from django import forms
-from models import Album, Song
+from models import Album, Song, Comment
+from django.contrib.auth.forms import UserCreationForm
 
 
-class UserForm(forms.ModelForm):
+class SignUp_UserForm(forms.ModelForm):
+	first_name = forms.CharField(max_length=30, help_text='Enter your firsts name')
+	last_name = forms.CharField(max_length=30, help_text='Enter your last name')
 	password = forms.CharField(widget = forms.PasswordInput)
 	class Meta:
 		model = User
-		fields = ['username', 'email', 'password']
+		fields= ['username', 'first_name', 'last_name', 'email','password']
+
+
+class Registration_UserForm(forms.ModelForm):
+	password = forms.CharField(widget = forms.PasswordInput)
+	class Meta:
+		model = User
+		fields = ['username', 'email', 'password', 'first_name', 'last_name']
 
 class AlbumForm(forms.ModelForm):
 	class Meta:
@@ -24,10 +34,9 @@ class SongForm(forms.ModelForm):
 		fields = ['album', 'song_title']
 
 	def __init__(self, *args, **kwargs):
-		album_creator=kwargs.pop('album_creator')
+		creator=kwargs.pop('creator')
 		super(SongForm, self).__init__(*args, **kwargs)
-		self.instance.album_creator = album_creator
-		self.instance.file_type = 'mp3'
+		self.instance.creator = creator
 
 class AlbumSongForm(forms.ModelForm):
 	class Meta:
@@ -40,5 +49,15 @@ class AlbumSongForm(forms.ModelForm):
 		super(AlbumSongForm, self).__init__(*args, **kwargs)
 		self.instance.album = album
 		self.instance.creator = creator
-		self.instance.file_type = 'mp3'
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ('text',)
+
+    def __init__(self, *args, **kwargs):
+    	author = kwargs.pop('author')
+    	super(CommentForm, self).__init__(*args, **kwargs)
+    	self.instance.author = author
 
