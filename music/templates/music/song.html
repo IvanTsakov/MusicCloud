@@ -74,7 +74,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    {% for comment in song.comment_set.all %}
+                                    {% for comment in comments %}
                                         <div class="comment">
                                             <div class="date">{{ comment.created_date|naturaltime }}</div>
                                             <strong>{{ comment.author }}</strong>

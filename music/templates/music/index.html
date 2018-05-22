@@ -19,7 +19,6 @@
                         </a>
                         <div class="caption">
                             <h2>{{ album.album_title }}</h2>
-                            <h4>{{ album.artist }}</h4>
 
                             <!-- View Details -->
                             <a href="{% url 'music:detail' album.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
@@ -42,8 +41,6 @@
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </form>
-
-
                         </div>
                     </div>
                 </div>
@@ -62,7 +59,7 @@
     </div>
 
     <!-- IF SEARCH - NOT WORKING YET -->
-<!--     {% if songs %}
+    {% if songs %}
         <div class="row">
             <div class="col-sm-12">
                 <h3>Songs</h3>
@@ -84,7 +81,6 @@
                                 {% for song in songs %}
                                     <tr>
                                         <td>{{ song.song_title }}</td>
-                                        <td>{{ song.album.artist }}</td>
                                         <td>
                                             <a target="_blank" href="{{ song.audio_file.url }}">
                                                 <button type="button" class="btn btn-success btn-xs">
@@ -110,6 +106,6 @@
             </div>
         </div>
     {% endif %}
- -->
+
 </div>
 {% endblock %}

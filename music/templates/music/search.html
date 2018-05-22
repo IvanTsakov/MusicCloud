@@ -1,0 +1,48 @@
+{% extends 'music/base.html' %}
+{% load app_filters %}
+{% block body %}
+
+<div class="albums-container container-fluid">
+    {% if results_paginator %}
+    <h1 class= "results" >Search results: {{ paginator.count }}</h1> 
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Results</h3>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table">
+                            <tbody>
+                                {% for result in results_paginator %}
+                                    <tr>
+                                        {%if result.song_title%}
+                                            <td>{{ result.song_title|highlight:search }}</td>
+                                        {%else%}
+                                            <td>{{ result.name|highlight:search }}
+                                        {%endif%}
+                                    </tr>   
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="pagination">
+                            <span class="step-links">
+                                {% if results_paginator.has_previous %}
+                                <a href="?q={{search}}&page={{results_paginator.previous_page_number}}"><-previous</a>
+                                {% endif %}
+                                <span class="current">
+                                    Page {{ results_paginator.number }} of {{ results_paginator.paginator.num_pages }}.
+                                </span>
+                                {% if results_paginator.has_next %}
+                                <a href="?q={{search}}&page={{results_paginator.next_page_number}}">next-></a>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

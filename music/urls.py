@@ -14,6 +14,7 @@ urlpatterns = [
 
 	url(r'^signup/$', views.UserFormView.as_view(), name='signup'),
 
+	url(r'^search', views.search, name="search"),
 	#/music/<album_id>/
 	url(r'^album/(?P<pk>[0-9]+)/$', views.detail_view, name = 'detail'),
 

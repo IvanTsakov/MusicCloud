@@ -27,3 +27,11 @@ body{
 	background-color: blue;
 
 }
+
+.results {
+	color: orange;
+}
+
+.highlight {
+	background-color: yellow;
+}

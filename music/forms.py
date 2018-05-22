@@ -22,7 +22,7 @@ class Registration_UserForm(forms.ModelForm):
 class AlbumForm(forms.ModelForm):
 	class Meta:
 		model = Album
-		fields = ['artist', 'album_title', 'genre', 'album_logo']
+		fields = ['album_title','album_logo']
 	def __init__(self, *args, **kwargs):
 		creator = kwargs.pop('creator')
 		super(AlbumForm, self).__init__(*args, **kwargs)
@@ -31,7 +31,7 @@ class AlbumForm(forms.ModelForm):
 class SongForm(forms.ModelForm):
 	class Meta:
 		model = Song
-		fields = ['album', 'song_title']
+		fields = ['album', 'song_title', 'genre','artist', 'tempo']
 
 	def __init__(self, *args, **kwargs):
 		creator=kwargs.pop('creator')
@@ -41,7 +41,7 @@ class SongForm(forms.ModelForm):
 class AlbumSongForm(forms.ModelForm):
 	class Meta:
 		model = Song
-		fields = ['song_title']
+		fields = ['song_title', 'genre', 'artist', 'tempo']
 
 	def __init__(self, *args, **kwargs):
 		album = kwargs.pop('album')
