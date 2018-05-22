@@ -194,9 +194,9 @@ def songs_view(request):
     filters_get = QueryDict(mutable=True)
     filters_get.update(request.GET.dict())
 
-    if 'order' in filters_get:
+    if request.GET.get('order') == order:
         filters_get.pop('order')
-    
+
     return render(request,'music/songs.html', {
         'song_paginator':song_paginator,
         'genres' : genre_filters ,
